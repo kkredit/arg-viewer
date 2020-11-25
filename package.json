@@ -4,7 +4,7 @@
   "description": "Dynamically view and update Argdown argument maps",
   "main": "index.js",
   "author": "Kevin Kredit <k.kredit.us@ieee.org>",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@argdown/core": "^1.5.0",
     "@argdown/node": "^1.5.2"
