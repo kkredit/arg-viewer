@@ -13,7 +13,7 @@
     "start": "elm-app start",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx,json}' --write",
     "elm-format": "elm-format --yes src/",
-    "elm-format-staged": "git diff --name-only --staged | grep -v .elm || elm-format --yes $(git diff --name-only --staged | grep .elm)",
+    "elm-format-staged": "git diff --name-only --staged | grep .elm | xargs -r elm-format --yes",
     "format": "yarn prettier-format && yarn elm-format",
     "test": "elm-test",
     "analyze": "elm-analyse"
