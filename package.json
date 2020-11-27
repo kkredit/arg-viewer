@@ -8,6 +8,7 @@
   "dependencies": {
     "@argdown/core": "^1.5.0",
     "@argdown/node": "^1.5.2",
+    "@argdown/web-components": "^1.5.0",
     "@babel/runtime": "^7.12.5",
     "regenerator": "^0.14.7"
   },
