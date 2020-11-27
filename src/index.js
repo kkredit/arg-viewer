@@ -4,7 +4,7 @@ import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 
 const am = new ArgdownManager();
-document.getElementById('map').innerHTML = am.renderWebComponent();
+am.loadArgument().then(() => am.renderInId('map'));
 
 Elm.Main.init({
   node: document.getElementById('root')
