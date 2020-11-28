@@ -1,0 +1,19 @@
+/* Custom */
+
+@font-face {
+  font-family: 'ArgVu Sans Mono Regular';
+  src: url(/ArgVuSansMono-Regular-8.2.otf) format('opentype');
+}
+
+.language-argdown {
+  text-align: left;
+}
+
+.config-button {
+  margin: 10px;
+}
+
+figure.argdown-figure {
+  margin-top: 0;
+  margin-bottom: 0;
+}

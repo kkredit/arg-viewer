@@ -27,7 +27,7 @@ export default class ArgdownManager {
   setVariant(variantName) {
     if (this.currentVariant === variantName) return;
     const variant = this.variants[variantName];
-    if (!variant) throw `Variant "${variant}" does not exist`;
+    if (!variant) throw `Variant "${variantName}" does not exist`;
 
     this.currentVariant = variantName;
     this.overrideGroupPlugin(variant.group);
@@ -71,7 +71,11 @@ export default class ArgdownManager {
   renderWebComponent(settings) {
     if (!this.argument) return fail('Argument not loaded yet.');
 
-    this.setVariant(settings);
+    try {
+      this.setVariant(settings);
+    } catch (e) {
+      return fail(e);
+    }
 
     const result = this.argdown.run({
       input: this.argument,

@@ -3,28 +3,35 @@ module ArgdownJsInterop exposing (..)
 import Json.Decode exposing (Decoder, bool, field, map2, string)
 
 
-type alias VariantConfig =
-    { name : String }
+type alias MapConfig =
+    { name : String
+    , label : String
+    }
 
 
-variants :
-    { whole : VariantConfig
-    , contrib : VariantConfig
-    , goingdark : VariantConfig
-    , goldenage : VariantConfig
-    , fallacies : VariantConfig
-    , measures : VariantConfig
-    , classes : VariantConfig
+presetConfigs :
+    { whole : MapConfig
+    , contrib : MapConfig
+    , goingdark : MapConfig
+    , goldenage : MapConfig
+    , fallacies : MapConfig
+    , measures : MapConfig
+    , classes : MapConfig
     }
-variants =
-    { whole = VariantConfig "whole"
-    , contrib = VariantConfig "contrib"
-    , goingdark = VariantConfig "goingdark"
-    , goldenage = VariantConfig "goldenage"
-    , fallacies = VariantConfig "fallacies"
-    , measures = VariantConfig "measures"
-    , classes = VariantConfig "classes"
+presetConfigs =
+    { whole = MapConfig "whole" "Entire Map"
+    , contrib = MapConfig "contrib" "Contributing Factors"
+    , goingdark = MapConfig "goingdark" "Going Dark"
+    , goldenage = MapConfig "goldenage" "Golden Age for Surveillance"
+    , fallacies = MapConfig "fallacies" "Fallacious Arguments"
+    , measures = MapConfig "measures" "Response Measures"
+    , classes = MapConfig "classes" "Classes of EA"
     }
+
+
+defaultConfig : MapConfig
+defaultConfig =
+    presetConfigs.contrib
 
 
 type ArgdownError
@@ -34,6 +41,7 @@ type ArgdownError
 
 type Msg
     = UpdateMapStateJson String
+    | UpdateConfig MapConfig
     | SubmitUpdate String
 
 

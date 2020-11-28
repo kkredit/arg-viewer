@@ -1,13 +1,15 @@
 port module Main exposing (..)
 
 import ArgdownJsInterop exposing (..)
+import Bootstrap.Button as Button
 import Bootstrap.Grid as Grid
 import Bootstrap.Grid.Col as Col
 import Bootstrap.Grid.Row as Row
 import Bootstrap.Spinner as Spinner
 import Browser
 import Html exposing (Html, div, h1, span, text)
-import Html.Attributes exposing (id)
+import Html.Attributes exposing (class, id, name)
+import Html.Events exposing (onClick)
 import Json.Decode exposing (decodeString, errorToString)
 
 
@@ -38,14 +40,14 @@ subscriptions _ =
 
 
 type alias Model =
-    { variant : VariantConfig
+    { config : MapConfig
     , argmap : ArgumentMapState
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model variants.contrib Loading, updateMap variants.contrib.name )
+    ( Model defaultConfig Loading, updateMap defaultConfig.name )
 
 
 
@@ -67,6 +69,9 @@ update msg model =
               else
                 Cmd.none
             )
+
+        UpdateConfig c ->
+            ( { model | config = c, argmap = Loading }, updateMap c.name )
 
         SubmitUpdate u ->
             ( model, updateMap u )
@@ -96,24 +101,61 @@ view model =
         [ h1 [] [ text "Argument Map Viewer" ]
         , Grid.container []
             [ Grid.row [ Row.centerXs ]
-                [ Grid.col [ Col.xs12 ]
-                    [ renderMapInfo model.argmap, div [ id "map" ] [] ]
+                [ Grid.col [ Col.xs10 ]
+                    (List.map (makeButton model.config.name)
+                        [ presetConfigs.whole
+                        , presetConfigs.contrib
+                        , presetConfigs.goingdark
+                        , presetConfigs.goldenage
+                        , presetConfigs.fallacies
+                        , presetConfigs.measures
+                        , presetConfigs.classes
+                        ]
+                    )
+                ]
+            , case renderMapSpecials model.argmap of
+                Nothing ->
+                    Grid.row [] []
+
+                Just h ->
+                    Grid.row [ Row.centerXs ] [ Grid.col [ Col.xs12 ] [ h ] ]
+            , Grid.row [ Row.centerXs ]
+                [ Grid.col [ Col.xs12 ] [ div [ id "map" ] [] ]
                 ]
             ]
         ]
 
 
-renderMapInfo : ArgumentMapState -> Html Msg
-renderMapInfo argmap =
-    case argmap of
-        Loading ->
-            div [ id "loading" ] [ Spinner.spinner [ Spinner.grow ] [] ]
+makeButton : String -> MapConfig -> Html Msg
+makeButton name mc =
+    let
+        color =
+            if name == mc.name then
+                Button.primary
 
+            else
+                Button.light
+    in
+    span []
+        [ Button.button
+            [ color
+            , Button.attrs [ class "config-button", onClick (UpdateConfig mc) ]
+            ]
+            [ text mc.label ]
+        ]
+
+
+renderMapSpecials : ArgumentMapState -> Maybe (Html Msg)
+renderMapSpecials argmap =
+    case argmap of
         Success ->
-            span [] []
+            Nothing
+
+        Loading ->
+            Just (div [ id "loading" ] [ Spinner.spinner [ Spinner.grow ] [] ])
 
         Failed message ->
-            text ("Error rendering map.\n" ++ message)
+            Just (text ("Error rendering map.\n" ++ message))
 
 
 
