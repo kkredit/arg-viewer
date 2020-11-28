@@ -8,6 +8,9 @@ import { GroupPlugin, PreselectionPlugin, WebComponentExportPlugin } from '@argd
 import { argdown } from '@argdown/core/dist/argdown';
 import variants from './argMapVariants';
 
+const fail = (message) => JSON.stringify({ success: false, error: message });
+const success = () => JSON.stringify({ success: true, error: '' });
+
 export default class ArgdownManager {
   constructor() {
     autoBind(this);
@@ -59,22 +62,34 @@ export default class ArgdownManager {
   }
 
   async loadArgument() {
-    const response = await fetch('./argument.ad');
-    this.argument = await response.text();
+    if (!this.argument) {
+      const response = await fetch('./argument.ad');
+      this.argument = await response.text();
+    }
   }
 
-  renderWebComponent() {
-    if (!this.argument) throw 'Argument not loaded yet';
-    return this.argdown.run({
+  renderWebComponent(settings) {
+    if (!this.argument) return fail('Argument not loaded yet.');
+
+    this.setVariant(settings);
+
+    const result = this.argdown.run({
       input: this.argument,
       process: this.defaultProcess,
       logLevel: this.logLevel
-    }).webComponent;
+    });
+
+    if (result.lexerErrors.length > 0) return fail(this.lexerErrors.map((e) => `${e.message}\n`));
+    if (!result.webComponent) return fail('Argdown WebComponent creation failed.');
+
+    this.webComponent = result.webComponent;
+    return success();
   }
 
-  renderInId(id) {
+  mountAtDomId(id) {
+    if (!this.webComponent) throw 'WebComponent has not been built yet!';
     const domNode = document.getElementById(id);
-    if (!domNode) throw `DOM node with id "${id}" does not exist`;
-    domNode.innerHTML = this.renderWebComponent();
+    if (!domNode) throw `DOM node with id "${id}" does not exist.`;
+    domNode.innerHTML = this.webComponent;
   }
 }
