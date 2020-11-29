@@ -6,6 +6,9 @@ import Json.Decode exposing (Decoder, bool, field, map2, string)
 type alias MapConfig =
     { name : String
     , label : String
+    , groupDepth : Maybe Int
+    , selectedSections : Maybe (List String)
+    , excludeStatements : Maybe (List String)
     }
 
 
@@ -19,13 +22,83 @@ presetConfigs :
     , classes : MapConfig
     }
 presetConfigs =
-    { whole = MapConfig "whole" "Entire Map"
-    , contrib = MapConfig "contrib" "Contributing Factors"
-    , goingdark = MapConfig "goingdark" "Going Dark"
-    , goldenage = MapConfig "goldenage" "Golden Age for Surveillance"
-    , fallacies = MapConfig "fallacies" "Fallacious Arguments"
-    , measures = MapConfig "measures" "Response Measures"
-    , classes = MapConfig "classes" "Classes of EA"
+    { whole = MapConfig "whole" "Entire Map" (Just 4) Nothing Nothing
+    , contrib =
+        MapConfig "contrib"
+            "Contributing Factors"
+            (Just 3)
+            (Just
+                [ "Central Issues"
+                , "Response Measures"
+                , "Arguments for Exceptional Access"
+                , "Exceptional Access"
+                ]
+            )
+            Nothing
+    , goingdark =
+        MapConfig "goingdark"
+            "Going Dark"
+            (Just 3)
+            (Just
+                [ "Exceptional Access"
+                , "Central Issues"
+                , "Going Dark Conclusions"
+                , "Going Dark Argument"
+                , "Going Dark Non Core"
+                , "Mobile Device Security Sucks"
+                ]
+            )
+            Nothing
+    , goldenage =
+        MapConfig "goldenage"
+            "Golden Age for Surveillance"
+            (Just 3)
+            (Just
+                [ "Exceptional Access"
+                , "Central Issues"
+                , "Going Dark Conclusions"
+                , "Golden Age Argument"
+                , "Golden Age Non Core"
+                , "Mobile Device Security Sucks"
+                ]
+            )
+            Nothing
+    , fallacies =
+        MapConfig "fallacies"
+            "Fallacious Arguments"
+            Nothing
+            (Just [ "Exceptional Access", "Fallacies", "Fallacious Arguments" ])
+            Nothing
+    , measures =
+        MapConfig "measures"
+            "Response Measures"
+            (Just 3)
+            (Just
+                [ "Central Issues"
+                , "Desireable Properties"
+                , "Response Measures"
+                , "Exceptional Access"
+                , "Current Capabilities"
+                , "Legal Measures"
+                , "Arguments for Measures"
+                ]
+            )
+            Nothing
+    , classes =
+        MapConfig "classes"
+            "Classes of EA"
+            (Just 3)
+            (Just
+                [ "Central Issues"
+                , "Desireable Properties"
+                , "Exceptional Access"
+                , "DAR EA Classes"
+                , "DIM EA Classes"
+                , "Arguments for EA Types"
+                , "Mobile Device Security Sucks"
+                ]
+            )
+            (Just [ "Exceptional Access" ])
     }
 
 

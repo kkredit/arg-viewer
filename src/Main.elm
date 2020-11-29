@@ -61,17 +61,18 @@ update msg model =
             let
                 state =
                     parseRenderStatus s
-            in
-            ( { model | argmap = state }
-            , if state == Success then
-                mountMapAtId "map"
 
-              else
-                Cmd.none
-            )
+                command =
+                    if state == Success then
+                        mountMapAtId "map"
+
+                    else
+                        Cmd.none
+            in
+            ( { model | argmap = state }, command )
 
         UpdateConfig c ->
-            ( { model | config = c, argmap = Loading }, updateMap c.name )
+            ( { model | config = c, argmap = Loading }, updateMap (configSerialize c) )
 
         SubmitUpdate u ->
             ( model, updateMap u )
@@ -89,6 +90,11 @@ parseRenderStatus jsonStatus =
 
             else
                 Failed status.error
+
+
+configSerialize : MapConfig -> String
+configSerialize c =
+    c.name
 
 
 
