@@ -22,6 +22,7 @@ export default class ArgdownManager {
   }
 
   applySettings(settings) {
+    this.overrideWebComponentPlugin(settings.webComponent);
     this.overrideGroupPlugin(settings.group);
     this.overridePreselectionPlugin(settings.selection);
   }
@@ -31,17 +32,20 @@ export default class ArgdownManager {
     this.argdown.replacePlugin(p.plugin.name, inst, p.stage);
   }
 
-  overrideWebComponentPlugin() {
+  overrideWebComponentPlugin(settings) {
     this.overridePlugin({
       plugin: WebComponentExportPlugin,
       stage: 'export-web-component',
-      settings: {
-        initialView: 'map',
-        useArgVu: true,
-        addGlobalStyles: false,
-        addWebComponentScript: false,
-        addWebComponentPolyfill: false
-      }
+      settings: Object.assign(
+        {
+          initialView: 'map',
+          useArgVu: true,
+          addGlobalStyles: false,
+          addWebComponentScript: false,
+          addWebComponentPolyfill: false
+        },
+        settings
+      )
     });
   }
 

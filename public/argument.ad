@@ -1,7 +1,4 @@
 ===
-title: >
-    Security, Safety, Privacy, and Trust
-subTitle: Arguments Regarding Encryption and Exceptional Access
 author: Kevin Kredit
 date: November 27, 2020
 color:
@@ -28,109 +25,8 @@ dot:
 model:
     removeTagsFromText: true
 mode: strict
-
-## Preview configs start
-
-# Whole map
-group:
-    groupDepth: 4
-
-
-## Contributing Factors
-#group:
-#    groupDepth: 3
-#selection:
-#    selectedSections:
-#        - Central Issues
-#        - Exceptional Access
-#        - Response Measures
-#        - Arguments for Exceptional Access
-
-## Going Dark
-#group:
-#    groupDepth: 3
-#selection:
-#    selectedSections:
-#        - Exceptional Access
-#        - Central Issues
-#        - Going Dark Conclusions
-#        - Going Dark Argument
-#        - Going Dark Non Core
-#        - Mobile Device Security Sucks
-
-## Golden Age
-#group:
-#    groupDepth: 3
-#selection:
-#    selectedSections:
-#        - Exceptional Access
-#        - Central Issues
-#        - Going Dark Conclusions
-#        - Golden Age Argument
-#        - Golden Age Non Core
-#        - Mobile Device Security Sucks
-
-## Fallacies
-#dot:
-#    graphVizSettings:
-#        rankdir: LR
-#selection:
-#    selectedSections:
-#        - Exceptional Access
-#        - Fallacies
-#        - Fallacious Arguments
-
-## Response Measures
-#group:
-#    groupDepth: 3
-#selection:
-#    selectedSections:
-#        - Response Measures
-#        - Exceptional Access
-#        - Current Capabilities
-#        - Legal Measures
-#        - Central Issues
-#        - Desireable Properties
-#        - Arguments for Measures
-
-## Types of EA
-#group:
-#    groupDepth: 3
-#selection:
-#    selectedSections:
-#        - Central Issues
-#        - Desireable Properties
-#        - Exceptional Access
-#        - DAR EA Classes
-#        - DIM EA Classes
-#        - Arguments for EA Types
-#        - Mobile Device Security Sucks
-#    excludeStatements:
-#        - Exceptional Access
-
-## EA Proposals
-#group:
-#    groupDepth: 3
-#selection:
-#    selectedSections:
-#        - Central Issues
-#        - Exceptional Access
-#        - DAR EA Proposals
-#        - DIM EA Proposals
-#        - Arguments for EA Proposals
-
-## Preview configs end
 ===
 
-/**
- * Comprehensive set of arguments in the problem space of security, safety, privacy, and trust, in which EA is a
- * proposed measure.
- *
- * Possible ways to group statements:
- *  - central issues -- the root problems
- *  - desireable outcomes?
- *  - measures? (and sub-measures, like types of EA)
- */
 
 # Central Issues
 
@@ -144,26 +40,21 @@ mandate. #core
 [Institutional Trust]: Governments and corporations have an obligation to honor their citizens' and customers'
 trust. #core
 
-# Response Measures
 
-<!-- [Unregulated use of Encryption]: Let technological progress proceed as it will. #anti-ea
-    <+ [Information Security]
-    >< [Exceptional Access] -->
+
+# Response Measures
 
 ## Current Capabilities
 
 [Do Nothing]: Conclude that the status quo is, indeed, okay. #action
 
 [Increase Investment]: Invest in traditional investigative techniques. #action
-<!-- From kerr_encryption_2017: find the key, guess the key, access plaintext while device in use, find another copy -->
 
 ## Legal Measures
 
 [Forced Password Disclosure]: Establish legal authority to compel password disclosure. #action
-<!-- From kerr_encryption_2017: compel the key -->
 
 [Lawful Hacking]: Establish legal authority for law enforcement to offensively hack access to data. #action
-<!-- From kerr_encryption_2017: exploit a technical flaw (possibly through vendor) -->
 
 ## Exceptional Access
 
@@ -171,10 +62,6 @@ trust. #core
 
 [EA is bad]: Opposite of @[Exceptional Access] {isInMap: false}
     >< [Exceptional Access]
-
-<!-- [Cryptographic EA]: Exceptional access achieved through altering cryptographic protocols. #action
-
-[System Design EA]: Exceptional access achieved through system implementation. #action -->
 
 [Weak Cryptography]: Use breakable cryptographic ciphers. #action
     <- [Minimize Increased Security Risk]
@@ -187,22 +74,13 @@ trust. #core
 
 [Device key escrow]: Store recovery keys in secure hardware on the device itself. #action
 
-<!-- TODO: Vendor unlock? -->
-
 ### DIM EA Classes
 
 [Ghost User]: Silently "conference call" the government in on encrypted conversations. #action
-<!-- See levy_robinson_2018 -->
 
 [Cryptographic Puzzles]: Make plaintext recoverable after solving calibrated cryptographic puzzles. #action
 
-<!-- ### DAR EA Proposals
 
-[EA DAR prop1] #action
-
-### DIM EA Proposals
-
-[EA DIM prop1] #action -->
 
 # Arguments for Exceptional Access {isGroup: false}
 
@@ -258,6 +136,8 @@ to investigation depending on their context and likelihood that they constitute 
 ----
 (5) [EA is bad]
 
+
+
 # Going Dark Conclusions {isGroup: false}
 
 ["Going Dark" Conclusion]: Law enforcement is "Going Dark" due to evidence-hiding encryption. EA is needed to restore
@@ -268,6 +148,8 @@ the balance between privacy and safety. #pro-ea  {rank: 'conclusions'}
 defense. EA would compromise this goal. #anti-ea {rank: 'conclusions'}
     -> [Exceptional Access]
     >< ["Going Dark" Conclusion]
+
+
 
 # Golden Age Argument
 
@@ -281,6 +163,8 @@ defense. EA would compromise this goal. #anti-ea {rank: 'conclusions'}
     effectiveness. #neutral
 ----
 (4) ["Golden Age" Conclusion]
+
+
 
 # Golden Age Non Core {isGroup: false}
 
@@ -307,11 +191,15 @@ traditional means. #neutral
 <Access not a problem for Mobile Phones>
     +> [Technology a Boon to Surveillance]
 
+
+
 <!-- Ordering or groups is goofy to get column spacing right. -->
 # Mobile Device Security Sucks {isGroup: false}
 
 <Access not a problem for Mobile Phones>: As of this research, law enforcement has extensive access to data on mobile
 phones, encrypted or not. #neutral
+
+
 
 # Going Dark Argument
 
@@ -332,6 +220,8 @@ this balance, and gives bad actors too much cover. #pro-ea
     cover. #neutral
 ----
 (6) ["Going Dark" Conclusion]
+
+
 
 # Going Dark Non Core {isGroup: false}
 
@@ -361,6 +251,8 @@ difficulty. #neutral
 (3) [Uncertain what Plaintext Holds]: It is uncertain that decrypted data will hold useful evidence. #neutral
 ----
 (4) [Encryption Not the Root Problem] {isInMap: false}
+
+
 
 # Fallacies
 
@@ -401,6 +293,8 @@ conclusion. #fallacy
 
 [Equivocation]
 
+
+
 # Fallacious Arguments {isGroup: false}
 
 <EA is a bad idea because backdoors are insecure> #fallacious #anti-ea
@@ -414,7 +308,6 @@ conclusion. #fallacy
 <!-- <We should not implement EA because a majority of the public is against it> #fallacious #anti-ea
     -> [Exceptional Access]
     <_ [Ad Populum (Bandwagon)] -->
-<!-- Citation: hanna_2019 -->
 
 <The technical community cannot give any ground on EA because the government will never be satisfied> #fallacious #anti-ea
     -> [Exceptional Access]
@@ -452,6 +345,9 @@ conclusion. #fallacy
     -> [Exceptional Access]
     <_ [Appeal to Ignorance] -->
 
+
+
+# Desireable Properties {isGroup: false}
 <!--
 # Response Measures
 ## Current Capabilities
@@ -464,11 +360,6 @@ conclusion. #fallacy
     [Cryptographic EA]
     [System Design EA]
 -->
-
-<!-- Start with good properties
-    See: varia_2018, group_2019, committee_decrypting_2018 -->
-
-# Desireable Properties {isGroup: false}
 
 [Minimize Increased Security Risk]: Measures should not dramatically increase risk for either specific data or
 cybersecurity in general. #neutral {rank: "metrics"}
@@ -492,6 +383,7 @@ generally. #neutral {rank: "metrics"}
     +> [Forced Password Disclosure]
     +> [Do Nothing]
     -> [Exceptional Access]
+
 
 
 # Arguments for Measures {isGroup: false}
@@ -524,11 +416,9 @@ safely. #neutral
     <+ [Minimize Increased Security Risk]
     -> [Exceptional Access]
 
+
+
 # Arguments for EA Types {isGroup: false}
-
-<!-- NOTE: Realization: to do each type justice, it really needs its own argmap. This format just leads to an
-indecipherable web. -->
-
 <!--
 # Desireable Properties
     [Minimize Increased Security Risk]:
@@ -594,13 +484,3 @@ the device for transparency. #neutral
     -> [Device key escrow]
     <_ <Temporary circumstance>: Device manufacturer's inability to secure their products is a temporary
        circumstance. #neutral
-
-<!-- # Arguments for EA Proposals {isGroup: false}
-
-<EA DIM prop1 doesn't help local LE>: DIM prop1 not even helpful #neutral
-    <+ [Public Safety]
-    -> [EA DIM prop1]
-
-<EA DAR prop1 enables surveillance>: DAR enables the baddies #neutral
-    <+ [Data Privacy]
-    -> [EA DAR prop1] -->

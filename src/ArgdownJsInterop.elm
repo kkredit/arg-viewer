@@ -116,11 +116,17 @@ defaultConfig =
 ---- COMMAND ----
 
 
+captionPrefex : String
+captionPrefex =
+    "Encryption and Exceptional Access — "
+
+
 configSerialize : MapConfig -> String
 configSerialize c =
     Encode.encode 1 <|
         Encode.object
-            [ ( "group", Encode.object [ ( "groupDepth", justOrNull Encode.int c.groupDepth ) ] )
+            [ ( "webComponent", Encode.object [ ( "figureCaption", Encode.string <| captionPrefex ++ c.label ) ] )
+            , ( "group", Encode.object [ ( "groupDepth", justOrNull Encode.int c.groupDepth ) ] )
             , ( "selection"
               , Encode.object
                     [ ( "selectedSections", justOrNull (Encode.list Encode.string) c.selectedSections )
