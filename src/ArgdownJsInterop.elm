@@ -1,6 +1,11 @@
 module ArgdownJsInterop exposing (..)
 
-import Json.Decode exposing (Decoder, bool, field, map2, string)
+import Json.Decode exposing (Decoder, bool, decodeString, errorToString, field, map2, string)
+import Json.Encode as Encode
+
+
+
+---- MAP CONFIGS ----
 
 
 type alias MapConfig =
@@ -107,15 +112,36 @@ defaultConfig =
     presetConfigs.contrib
 
 
-type ArgdownError
-    = InvalidSettings
-    | OtherError
+
+---- COMMAND ----
 
 
-type Msg
-    = UpdateMapStateJson String
-    | UpdateConfig MapConfig
-    | SubmitUpdate String
+configSerialize : MapConfig -> String
+configSerialize c =
+    Encode.encode 1 <|
+        Encode.object
+            [ ( "group", Encode.object [ ( "groupDepth", justOrNull Encode.int c.groupDepth ) ] )
+            , ( "selection"
+              , Encode.object
+                    [ ( "selectedSections", justOrNull (Encode.list Encode.string) c.selectedSections )
+                    , ( "excludeStatements", justOrNull (Encode.list Encode.string) c.excludeStatements )
+                    ]
+              )
+            ]
+
+
+justOrNull : (a -> Encode.Value) -> Maybe a -> Encode.Value
+justOrNull encoder val =
+    case val of
+        Nothing ->
+            Encode.null
+
+        Just v ->
+            encoder v
+
+
+
+---- RESPONSE ----
 
 
 type alias UpdateMapState =
@@ -135,3 +161,17 @@ type ArgumentMapState
     = Loading
     | Failed String
     | Success
+
+
+parseRenderStatus : String -> ArgumentMapState
+parseRenderStatus jsonStatus =
+    case decodeString updateMapStateDecoder jsonStatus of
+        Err e ->
+            Failed ("Error parsing JSON response: " ++ errorToString e)
+
+        Ok status ->
+            if status.success then
+                Success
+
+            else
+                Failed status.error

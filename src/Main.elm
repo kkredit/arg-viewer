@@ -8,9 +8,8 @@ import Bootstrap.Grid.Row as Row
 import Bootstrap.Spinner as Spinner
 import Browser
 import Html exposing (Html, div, h1, span, text)
-import Html.Attributes exposing (class, id, name)
+import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
-import Json.Decode exposing (decodeString, errorToString)
 
 
 
@@ -23,7 +22,7 @@ port updateMap : String -> Cmd msg
 port mountMapAtId : String -> Cmd msg
 
 
-port receiveMap : (String -> msg) -> Sub msg
+port updateStatus : (String -> msg) -> Sub msg
 
 
 
@@ -32,7 +31,7 @@ port receiveMap : (String -> msg) -> Sub msg
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveMap UpdateMapStateJson
+    updateStatus UpdateMapStateJson
 
 
 
@@ -47,11 +46,16 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model defaultConfig Loading, updateMap defaultConfig.name )
+    ( Model defaultConfig Loading, updateMap (configSerialize defaultConfig) )
 
 
 
 ---- UPDATE ----
+
+
+type Msg
+    = UpdateMapStateJson String
+    | UpdateConfig MapConfig
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -73,28 +77,6 @@ update msg model =
 
         UpdateConfig c ->
             ( { model | config = c, argmap = Loading }, updateMap (configSerialize c) )
-
-        SubmitUpdate u ->
-            ( model, updateMap u )
-
-
-parseRenderStatus : String -> ArgumentMapState
-parseRenderStatus jsonStatus =
-    case decodeString updateMapStateDecoder jsonStatus of
-        Err e ->
-            Failed ("Error parsing JSON response: " ++ errorToString e)
-
-        Ok status ->
-            if status.success then
-                Success
-
-            else
-                Failed status.error
-
-
-configSerialize : MapConfig -> String
-configSerialize c =
-    c.name
 
 
 

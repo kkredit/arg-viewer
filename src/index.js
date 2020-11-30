@@ -9,9 +9,8 @@ const elmApp = Elm.Main.init({
   node: document.getElementById('root')
 });
 
-console.log(elmApp.ports);
-elmApp.ports.updateMap.subscribe((settings) =>
-  am.loadArgument().then(() => elmApp.ports.receiveMap.send(am.renderWebComponent(settings)))
+elmApp.ports.updateMap.subscribe((settingsJson) =>
+  am.loadArgument().then(() => elmApp.ports.updateStatus.send(am.renderWebComponent(settingsJson)))
 );
 
 elmApp.ports.mountMapAtId.subscribe((id) => am.mountAtDomId(id));

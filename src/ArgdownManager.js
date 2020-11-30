@@ -6,7 +6,6 @@
 import autoBind from 'auto-bind';
 import { GroupPlugin, PreselectionPlugin, WebComponentExportPlugin } from '@argdown/core';
 import { argdown } from '@argdown/core/dist/argdown';
-import variants from './argMapVariants';
 
 const fail = (message) => JSON.stringify({ success: false, error: message });
 const success = () => JSON.stringify({ success: true, error: '' });
@@ -16,22 +15,15 @@ export default class ArgdownManager {
     autoBind(this);
 
     this.argdown = argdown;
-    this.variants = variants;
-    this.setVariant('contrib');
     this.overrideWebComponentPlugin();
 
     this.defaultProcess = this.argdown.defaultProcesses['export-web-component'];
     this.logLevel = process.env.NODE_ENV === 'production' ? 'error' : 'verbose';
   }
 
-  setVariant(variantName) {
-    if (this.currentVariant === variantName) return;
-    const variant = this.variants[variantName];
-    if (!variant) throw `Variant "${variantName}" does not exist`;
-
-    this.currentVariant = variantName;
-    this.overrideGroupPlugin(variant.group);
-    this.overridePreselectionPlugin(variant.selection);
+  applySettings(settings) {
+    this.overrideGroupPlugin(settings.group);
+    this.overridePreselectionPlugin(settings.selection);
   }
 
   overridePlugin(p) {
@@ -68,13 +60,14 @@ export default class ArgdownManager {
     }
   }
 
-  renderWebComponent(settings) {
+  renderWebComponent(settingsJson) {
     if (!this.argument) return fail('Argument not loaded yet.');
 
     try {
-      this.setVariant(settings);
+      const settings = JSON.parse(settingsJson);
+      this.applySettings(settings);
     } catch (e) {
-      return fail(e);
+      return fail('Failed to parse settings JSON.');
     }
 
     const result = this.argdown.run({
