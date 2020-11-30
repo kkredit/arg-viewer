@@ -1,37 +1,10 @@
-port module Main exposing (..)
+module Main exposing (..)
 
-import ArgdownJsInterop exposing (..)
-import Bootstrap.Button as Button
-import Bootstrap.Grid as Grid
-import Bootstrap.Grid.Col as Col
-import Bootstrap.Grid.Row as Row
-import Bootstrap.Spinner as Spinner
+import Argmaps as Argmaps
+import Bootstrap.Navbar as Navbar
 import Browser
-import Html exposing (Html, div, h1, span, text)
-import Html.Attributes exposing (class, id)
-import Html.Events exposing (onClick)
-
-
-
--- PORTS
-
-
-port updateMap : String -> Cmd msg
-
-
-port mountMapAtId : String -> Cmd msg
-
-
-port updateStatus : (String -> msg) -> Sub msg
-
-
-
--- SUBSCRIPTIONS
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    updateStatus UpdateMapStateJson
+import Html exposing (Html, div, h1, text)
+import Html.Attributes exposing (class, href, id)
 
 
 
@@ -39,14 +12,21 @@ subscriptions _ =
 
 
 type alias Model =
-    { config : MapConfig
-    , argmap : ArgumentMapState
+    { navbarState : Navbar.State
+    , argmapsState : Argmaps.Model
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model defaultConfig Loading, updateMap (configSerialize defaultConfig) )
+    let
+        ( navbarState, navbarCmd ) =
+            Navbar.initialState NavbarMsg
+
+        ( argmapsState, argmapsCmd ) =
+            Argmaps.initialState
+    in
+    ( Model navbarState argmapsState, argmapsCmd )
 
 
 
@@ -54,29 +34,22 @@ init =
 
 
 type Msg
-    = UpdateMapStateJson String
-    | UpdateConfig MapConfig
+    = NavbarMsg Navbar.State
+    | ArgmapsMsg Argmaps.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        UpdateMapStateJson s ->
+        NavbarMsg state ->
+            ( { model | navbarState = state }, Cmd.none )
+
+        ArgmapsMsg am ->
             let
-                state =
-                    parseRenderStatus s
-
-                command =
-                    if state == Success then
-                        mountMapAtId "map"
-
-                    else
-                        Cmd.none
+                ( argmapsState, argmapsCmd ) =
+                    Argmaps.update am model.argmapsState
             in
-            ( { model | argmap = state }, command )
-
-        UpdateConfig c ->
-            ( { model | config = c, argmap = Loading }, updateMap (configSerialize c) )
+            ( { model | argmapsState = argmapsState }, argmapsCmd )
 
 
 
@@ -85,65 +58,14 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ h1 [] [ text "Argument Map Viewer" ]
-        , Grid.container []
-            [ Grid.row [ Row.centerXs ]
-                [ Grid.col [ Col.xs10 ]
-                    (List.map (makeButton model.config.name)
-                        [ presetConfigs.whole
-                        , presetConfigs.contrib
-                        , presetConfigs.goingdark
-                        , presetConfigs.goldenage
-                        , presetConfigs.fallacies
-                        , presetConfigs.measures
-                        , presetConfigs.classes
-                        ]
-                    )
-                ]
-            , case renderMapSpecials model.argmap of
-                Nothing ->
-                    Grid.row [] []
-
-                Just h ->
-                    Grid.row [ Row.centerXs ] [ Grid.col [ Col.xs12 ] [ h ] ]
-            , Grid.row [ Row.centerXs ]
-                [ Grid.col [ Col.xs12 ] [ div [ id "map" ] [] ]
-                ]
-            ]
+    div [ class "container" ]
+        [ Navbar.config NavbarMsg
+            |> Navbar.brand [ href "#" ] [ text "Argument Maps" ]
+            |> Navbar.items
+                [ Navbar.itemLink [ href "#" ] [ text "About" ] ]
+            |> Navbar.view model.navbarState
+        , Argmaps.view model.argmapsState ArgmapsMsg
         ]
-
-
-makeButton : String -> MapConfig -> Html Msg
-makeButton name mc =
-    let
-        color =
-            if name == mc.name then
-                Button.primary
-
-            else
-                Button.light
-    in
-    span []
-        [ Button.button
-            [ color
-            , Button.attrs [ class "config-button", onClick (UpdateConfig mc) ]
-            ]
-            [ text mc.label ]
-        ]
-
-
-renderMapSpecials : ArgumentMapState -> Maybe (Html Msg)
-renderMapSpecials argmap =
-    case argmap of
-        Success ->
-            Nothing
-
-        Loading ->
-            Just (div [ id "loading" ] [ Spinner.spinner [ Spinner.grow ] [] ])
-
-        Failed message ->
-            Just (text ("Error rendering map.\n" ++ message))
 
 
 
@@ -156,5 +78,5 @@ main =
         { view = view
         , init = \_ -> init
         , update = update
-        , subscriptions = subscriptions
+        , subscriptions = Argmaps.subscriptions ArgmapsMsg
         }
