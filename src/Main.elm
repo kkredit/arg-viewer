@@ -1,10 +1,14 @@
 module Main exposing (..)
 
-import Argmaps as Argmaps
+import About
+import Argmaps
 import Bootstrap.Navbar as Navbar
 import Browser
-import Html exposing (Html, div, h1, text)
-import Html.Attributes exposing (class, href, id)
+import Browser.Navigation as Nav
+import Html exposing (Html, div, text)
+import Html.Attributes exposing (class, href)
+import Url
+import Url.Parser as UrlParser exposing ((</>), Parser, fragment, map, oneOf, s)
 
 
 
@@ -12,13 +16,15 @@ import Html.Attributes exposing (class, href, id)
 
 
 type alias Model =
-    { navbarState : Navbar.State
+    { key : Nav.Key
+    , route : Maybe Route
+    , navbarState : Navbar.State
     , argmapsState : Argmaps.Model
     }
 
 
-init : ( Model, Cmd Msg )
-init =
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url key =
     let
         ( navbarState, navbarCmd ) =
             Navbar.initialState NavbarMsg
@@ -26,7 +32,7 @@ init =
         ( argmapsState, argmapsCmd ) =
             Argmaps.initialState
     in
-    ( Model navbarState argmapsState, argmapsCmd )
+    ( Model key (UrlParser.parse routeParser url) navbarState argmapsState, Cmd.batch [ navbarCmd, argmapsCmd ] )
 
 
 
@@ -34,13 +40,26 @@ init =
 
 
 type Msg
-    = NavbarMsg Navbar.State
+    = LinkClicked Browser.UrlRequest
+    | UrlChanged Url.Url
+    | NavbarMsg Navbar.State
     | ArgmapsMsg Argmaps.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model, Nav.pushUrl model.key <| Url.toString url )
+
+                Browser.External href ->
+                    ( model, Nav.load href )
+
+        UrlChanged url ->
+            ( { model | route = UrlParser.parse routeParser url }, Cmd.none )
+
         NavbarMsg state ->
             ( { model | navbarState = state }, Cmd.none )
 
@@ -53,19 +72,54 @@ update msg model =
 
 
 
+---- ROUTING ----
+
+
+type Route
+    = About
+    | Argmaps (Maybe String)
+
+
+routeParser : Parser (Route -> a) a
+routeParser =
+    oneOf
+        [ map About (s "about")
+        , map Argmaps (fragment identity)
+        ]
+
+
+
 ---- VIEW ----
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    div [ class "container" ]
-        [ Navbar.config NavbarMsg
-            |> Navbar.brand [ href "#" ] [ text "Argument Maps" ]
-            |> Navbar.items
-                [ Navbar.itemLink [ href "#" ] [ text "About" ] ]
-            |> Navbar.view model.navbarState
-        , Argmaps.view model.argmapsState ArgmapsMsg
+    let
+        ( title, content ) =
+            case model.route of
+                Nothing ->
+                    ( "Invalid path", text "Invalid path." )
+
+                Just route ->
+                    case route of
+                        About ->
+                            ( "About", About.view )
+
+                        Argmaps _ ->
+                            ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg )
+    in
+    { title = title
+    , body =
+        [ div [ class "container" ]
+            [ Navbar.config NavbarMsg
+                |> Navbar.brand [ href "/" ] [ text "Argument Maps" ]
+                |> Navbar.items
+                    [ Navbar.itemLink [ href "/about" ] [ text "About" ] ]
+                |> Navbar.view model.navbarState
+            , content
+            ]
         ]
+    }
 
 
 
@@ -74,9 +128,11 @@ view model =
 
 main : Program () Model Msg
 main =
-    Browser.element
+    Browser.application
         { view = view
-        , init = \_ -> init
+        , init = init
         , update = update
         , subscriptions = Argmaps.subscriptions ArgmapsMsg
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
         }
