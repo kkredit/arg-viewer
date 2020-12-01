@@ -1,7 +1,7 @@
 module About exposing (view)
 
 import ArgdownJsInterop exposing (..)
-import Html exposing (Html, div, h1, span, text)
+import Html exposing (Html, text)
 
 
 

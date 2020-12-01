@@ -5,6 +5,14 @@
   src: url(/ArgVuSansMono-Regular-8.2.otf) format('opentype');
 }
 
+.page-header {
+  margin: 0.5em;
+}
+
+div.row {
+  margin-bottom: 10px;
+}
+
 .language-argdown {
   text-align: left;
 }

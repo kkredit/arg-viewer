@@ -70,6 +70,7 @@ export default class ArgdownManager {
     try {
       const settings = JSON.parse(settingsJson);
       this.applySettings(settings);
+      // return fail('Failed to parse settings JSON.'); TODO: get error message to show up
     } catch (e) {
       return fail('Failed to parse settings JSON.');
     }

@@ -110,14 +110,13 @@ view model =
     in
     { title = title
     , body =
-        [ div [ class "container" ]
-            [ Navbar.config NavbarMsg
-                |> Navbar.brand [ href "/" ] [ text "Argument Maps" ]
-                |> Navbar.items
-                    [ Navbar.itemLink [ href "/about" ] [ text "About" ] ]
-                |> Navbar.view model.navbarState
-            , content
-            ]
+        [ Navbar.config NavbarMsg
+            |> Navbar.dark
+            |> Navbar.brand [ href "/" ] [ text "Argument Maps" ]
+            |> Navbar.items
+                [ Navbar.itemLink [ href "/about" ] [ text "About" ] ]
+            |> Navbar.view model.navbarState
+        , div [ class "container" ] [ content ]
         ]
     }
 
