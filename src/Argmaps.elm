@@ -8,7 +8,7 @@ import Bootstrap.Grid.Col as Col
 import Bootstrap.Grid.Row as Row
 import Bootstrap.Spinner as Spinner
 import Html exposing (Html, div, h1, span, text)
-import Html.Attributes exposing (class, id)
+import Html.Attributes exposing (class, id, style)
 import Html.Events exposing (onClick)
 
 
@@ -53,12 +53,11 @@ update msg model =
                     else
                         Cmd.none
             in
-            ( { model | argmap = state }, command )
+            ( { model | argmap = state, alertVisibility = Alert.shown }, command )
 
         UpdateConfig c ->
             ( { model | config = c, argmap = Loading }, updateMap (configSerialize c) )
 
-        -- TODO: error message isn't showing up!
         AlertMsg visibility ->
             ( { model | alertVisibility = visibility }, Cmd.none )
 
@@ -105,7 +104,7 @@ view model toMsg =
                     , presetConfigs.classes
                     ]
                 )
-            , makeRowCol Col.sm10 [ renderMapSpecials model.argmap model.alertVisibility toMsg ]
+            , makeRowCol Col.sm10 <| renderMapSpecials model.argmap model.alertVisibility toMsg
             , makeRowCol Col.sm12 [ div [ id "map" ] [] ]
             ]
         ]
@@ -135,21 +134,22 @@ makeButton name toMsg mc =
         ]
 
 
-renderMapSpecials : ArgumentMapState -> Alert.Visibility -> (Msg -> msg) -> Html msg
+renderMapSpecials : ArgumentMapState -> Alert.Visibility -> (Msg -> msg) -> List (Html msg)
 renderMapSpecials argmap alertVis toMsg =
     case argmap of
         Success ->
-            text ""
+            []
 
         Loading ->
-            div [ id "loading" ] [ Spinner.spinner [ Spinner.grow ] [] ]
+            [ div [ id "loading" ] [ Spinner.spinner [ Spinner.grow ] [] ] ]
 
         Failed message ->
-            Alert.config
+            [ Alert.config
                 |> Alert.danger
                 |> Alert.dismissable (AlertMsg >> toMsg)
                 |> Alert.children
                     [ Alert.h4 [] [ text "Error rendering map!" ]
-                    , text message
+                    , div [ style "text-align" "left" ] [ text message ]
                     ]
                 |> Alert.view alertVis
+            ]
