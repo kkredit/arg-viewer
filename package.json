@@ -20,7 +20,8 @@
     "elm-format-staged": "FILES=$(git diff --name-only --staged | grep .elm); if [[ \"\" != \"$FILES\" ]]; then elm-format --yes $FILES; git add $FILES; fi",
     "format": "yarn prettier-format && yarn elm-format",
     "test": "elm-test",
-    "analyze": "elm-analyse"
+    "analyze": "elm-analyse",
+    "build": "elm-app build"
   },
   "husky": {
     "hooks": {
