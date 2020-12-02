@@ -639,4 +639,4 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
   </style>
 `;a.observedAttributes=["initial-view","without-zoom","without-maximize","without-logo","without-header"],customElements.define("argdown-map",(0,e.component)(a));
 },{"lit-html":"SPDu","haunted":"JghE","./ArgdownMark":"UIDT","./ExpandIcon":"ey8r","./MinimizeIcon":"SU2R","d3-selection":"ysDv","./zoomUtils":"zUQk","./snow-in-spring.argdown-theme.css":"u5Q1","./global-styles.css":"u5Q1"}]},{},["uXi1"], null)
-//# sourceMappingURL=/argdown-map.js.map
+//# sourceMappingURL=./argdown-map.js.map
