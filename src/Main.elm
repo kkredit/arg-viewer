@@ -5,7 +5,7 @@ import Argmaps
 import Bootstrap.Navbar as Navbar
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, div, text)
+import Html exposing (Attribute, div, text)
 import Html.Attributes exposing (class, href)
 import Url
 import Url.Parser as UrlParser exposing ((</>), Parser, fragment, map, oneOf, s)
@@ -17,14 +17,15 @@ import Url.Parser as UrlParser exposing ((</>), Parser, fragment, map, oneOf, s)
 
 type alias Model =
     { key : Nav.Key
+    , basepath : String
     , route : Maybe Route
     , navbarState : Navbar.State
     , argmapsState : Argmaps.Model
     }
 
 
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init _ url key =
+init : String -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init basepath url key =
     let
         ( navbarState, navbarCmd ) =
             Navbar.initialState NavbarMsg
@@ -32,7 +33,7 @@ init _ url key =
         ( argmapsState, argmapsCmd ) =
             Argmaps.initialState
     in
-    ( Model key (UrlParser.parse routeParser url) navbarState argmapsState, Cmd.batch [ navbarCmd, argmapsCmd ] )
+    ( Model key basepath (UrlParser.parse (routeParser basepath) url) navbarState argmapsState, Cmd.batch [ navbarCmd, argmapsCmd ] )
 
 
 
@@ -58,7 +59,7 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model | route = UrlParser.parse routeParser url }, Cmd.none )
+            ( { model | route = UrlParser.parse (routeParser model.basepath) url }, Cmd.none )
 
         NavbarMsg state ->
             ( { model | navbarState = state }, Cmd.none )
@@ -73,23 +74,39 @@ update msg model =
 
 
 ---- ROUTING ----
+-- Use hash based routing to work on GitHub Pages
 
 
 type Route
-    = About
-    | Argmaps (Maybe String)
+    = Base (Maybe String)
 
 
-routeParser : Parser (Route -> a) a
-routeParser =
+routeParser : String -> Parser (Route -> a) a
+routeParser basepath =
+    let
+        basePrepend =
+            if basepath == "" then
+                identity
+
+            else
+                (</>) <| s basepath
+    in
     oneOf
-        [ map About (s "about")
-        , map Argmaps (fragment identity)
+        [ map Base (basePrepend <| fragment identity)
         ]
 
 
 
 ---- VIEW ----
+
+
+baseHref : String -> String -> Attribute msg
+baseHref basepath path =
+    if String.left 1 path == "/" then
+        href <| "/" ++ basepath ++ path
+
+    else
+        href path
 
 
 view : Model -> Browser.Document Msg
@@ -102,19 +119,33 @@ view model =
 
                 Just route ->
                     case route of
-                        About ->
-                            ( "About", About.view )
+                        Base maybeHash ->
+                            case maybeHash of
+                                Nothing ->
+                                    ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg )
 
-                        Argmaps _ ->
-                            ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg )
+                                Just hash ->
+                                    case hash of
+                                        "about" ->
+                                            ( "About", About.view )
+
+                                        _ ->
+                                            ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg )
+
+        bHref =
+            if model.basepath /= "" then
+                baseHref model.basepath
+
+            else
+                href
     in
     { title = title
     , body =
         [ Navbar.config NavbarMsg
             |> Navbar.dark
-            |> Navbar.brand [ href "/" ] [ text "Argument Maps" ]
+            |> Navbar.brand [ bHref "/" ] [ text "Argument Maps" ]
             |> Navbar.items
-                [ Navbar.itemLink [ href "/about" ] [ text "About" ] ]
+                [ Navbar.itemLink [ bHref "/#about" ] [ text "About" ] ]
             |> Navbar.view model.navbarState
         , div [ class "container" ] [ content ]
         ]
@@ -125,7 +156,7 @@ view model =
 ---- PROGRAM ----
 
 
-main : Program () Model Msg
+main : Program String Model Msg
 main =
     Browser.application
         { view = view

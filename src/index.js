@@ -6,7 +6,8 @@ import * as serviceWorker from './serviceWorker';
 const am = new ArgdownManager();
 
 const elmApp = Elm.Main.init({
-  node: document.getElementById('root')
+  node: document.getElementById('root'),
+  flags: process.env.ELM_APP_BASE_PATH || ''
 });
 
 elmApp.ports.updateMap.subscribe((settingsJson) =>

@@ -18,7 +18,7 @@ export default class ArgdownManager {
     this.overrideWebComponentPlugin();
 
     this.defaultProcess = this.argdown.defaultProcesses['export-web-component'];
-    this.logLevel = process.env.NODE_ENV === 'production' ? 'error' : 'verbose';
+    this.logLevel = process.env.NODE_ENV === 'production' ? 'error' : 'warning';
   }
 
   applySettings(settings) {
@@ -88,9 +88,13 @@ export default class ArgdownManager {
   }
 
   mountAtDomId(id) {
-    if (!this.webComponent) throw 'WebComponent has not been built yet!';
-    const domNode = document.getElementById(id);
-    if (!domNode) throw `DOM node with id "${id}" does not exist.`;
-    domNode.innerHTML = this.webComponent;
+    try {
+      if (!this.webComponent) throw 'WebComponent has not been built yet!';
+      const domNode = document.getElementById(id);
+      if (!domNode) throw `DOM node with id "${id}" does not exist.`;
+      domNode.innerHTML = this.webComponent;
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
