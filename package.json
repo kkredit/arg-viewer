@@ -16,6 +16,7 @@
     "regenerator": "^0.14.7"
   },
   "scripts": {
+    "gh-deploy": "ELM_APP_BASE_PATH=arg-viewer elm-app build && gh-pages -d build",
     "start": "elm-app start",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx,json}' --write",
     "elm-format": "elm-format --yes src/",
@@ -43,6 +44,7 @@
     "elm-analyse": "^0.16.5",
     "elm-format": "^0.8.4",
     "elm-test": "^0.19.1-revision4",
+    "gh-pages": "^3.1.0",
     "husky": "^4.3.0",
     "prettier": "^2.2.0",
     "pretty-quick": "^3.1.0"
