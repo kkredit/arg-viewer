@@ -6,11 +6,13 @@
   "author": "Kevin Kredit <k.kredit.us@ieee.org>",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@aduh95/viz.js": "^3.2.1",
     "@argdown/core": "^1.5.0",
-    "@argdown/node": "^1.5.2",
+    "@argdown/node": "^1.5.3",
     "@argdown/web-components": "^1.5.0",
     "@babel/runtime": "^7.12.5",
     "auto-bind": "^4.0.0",
+    "lodash.defaultsdeep": "^4.6.1",
     "regenerator": "^0.14.7"
   },
   "scripts": {

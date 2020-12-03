@@ -5,7 +5,7 @@
 
 import autoBind from 'auto-bind';
 import * as Argdown from '@argdown/core';
-import { SyncDotToSvgExportPlugin } from '@argdown/core/dist/plugins/SyncDotToSvgExportPlugin';
+import { SyncDotToSvgExportPlugin } from './SyncDotToSvgExportPlugin';
 
 const fail = (message) => JSON.stringify({ success: false, error: message });
 const success = () => JSON.stringify({ success: true, error: '' });
