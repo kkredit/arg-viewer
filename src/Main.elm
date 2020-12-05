@@ -140,7 +140,7 @@ view model =
                         Base maybeHash ->
                             case maybeHash of
                                 Nothing ->
-                                    ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg, True )
+                                    ( "Argument Maps", Argmaps.view model.argmapsState ArgmapsMsg, True )
 
                                 Just hash ->
                                     case hash of
@@ -148,7 +148,7 @@ view model =
                                             ( "About", About.view model.aboutState, False )
 
                                         _ ->
-                                            ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg, True )
+                                            ( "Argument Maps", Argmaps.view model.argmapsState ArgmapsMsg, True )
 
         bHref =
             if model.basePath /= "" then

@@ -96,7 +96,7 @@ export default class ArgdownManager {
 
   async loadArgument() {
     if (!this.argument) {
-      const response = await fetch('./argument.ad');
+      const response = await fetch('./assets/argument.ad');
       this.argument = await response.text();
     }
   }

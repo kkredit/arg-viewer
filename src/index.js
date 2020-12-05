@@ -2,6 +2,7 @@ import './main.css';
 import ArgdownManager from './ArgdownManager';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
+import './vendor/argdown-map';
 
 const am = new ArgdownManager();
 
