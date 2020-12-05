@@ -23,7 +23,8 @@
     "format": "yarn prettier-format && yarn elm-format",
     "test": "elm-test",
     "analyze": "elm-analyse",
-    "build": "elm-app build"
+    "build": "elm-app build",
+    "mdupdate": "bash ./src/MdPages/mdElmConverter.sh"
   },
   "husky": {
     "hooks": {

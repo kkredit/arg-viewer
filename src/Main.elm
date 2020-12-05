@@ -17,23 +17,37 @@ import Url.Parser as UrlParser exposing ((</>), Parser, fragment, map, oneOf, s)
 
 type alias Model =
     { key : Nav.Key
-    , basepath : String
+    , basePath : String
     , route : Maybe Route
     , navbarState : Navbar.State
     , argmapsState : Argmaps.Model
+    , aboutState : About.Model Msg
     }
 
 
-init : String -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init basepath url key =
+init : List String -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
     let
         ( navbarState, navbarCmd ) =
             Navbar.initialState NavbarMsg
 
         ( argmapsState, argmapsCmd ) =
             Argmaps.initialState
+
+        basePath =
+            strListIndex flags 0
+
+        aboutState =
+            About.initialState AboutMsg
     in
-    ( Model key basepath (UrlParser.parse (routeParser basepath) url) navbarState argmapsState, Cmd.batch [ navbarCmd, argmapsCmd ] )
+    ( Model key basePath (UrlParser.parse (routeParser basePath) url) navbarState argmapsState aboutState
+    , Cmd.batch [ navbarCmd, argmapsCmd ]
+    )
+
+
+strListIndex : List String -> Int -> String
+strListIndex list n =
+    Maybe.withDefault "" <| List.head <| List.drop n list
 
 
 
@@ -45,6 +59,7 @@ type Msg
     | UrlChanged Url.Url
     | NavbarMsg Navbar.State
     | ArgmapsMsg Argmaps.Msg
+    | AboutMsg About.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -59,7 +74,7 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model | route = UrlParser.parse (routeParser model.basepath) url }, Cmd.none )
+            ( { model | route = UrlParser.parse (routeParser model.basePath) url }, Cmd.none )
 
         NavbarMsg state ->
             ( { model | navbarState = state }, Cmd.none )
@@ -70,6 +85,9 @@ update msg model =
                     Argmaps.update am model.argmapsState
             in
             ( { model | argmapsState = argmapsState }, argmapsCmd )
+
+        AboutMsg _ ->
+            ( model, Cmd.none )
 
 
 
@@ -82,14 +100,14 @@ type Route
 
 
 routeParser : String -> Parser (Route -> a) a
-routeParser basepath =
+routeParser basePath =
     let
         basePrepend =
-            if basepath == "" then
+            if basePath == "" then
                 identity
 
             else
-                (</>) <| s basepath
+                (</>) <| s basePath
     in
     oneOf
         [ map Base (basePrepend <| fragment identity)
@@ -101,9 +119,9 @@ routeParser basepath =
 
 
 baseHref : String -> String -> Attribute msg
-baseHref basepath path =
+baseHref basePath path =
     if String.left 1 path == "/" then
-        href <| "/" ++ basepath ++ path
+        href <| "/" ++ basePath ++ path
 
     else
         href path
@@ -127,14 +145,14 @@ view model =
                                 Just hash ->
                                     case hash of
                                         "about" ->
-                                            ( "About", About.view, False )
+                                            ( "About", About.view model.aboutState, False )
 
                                         _ ->
                                             ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg, True )
 
         bHref =
-            if model.basepath /= "" then
-                baseHref model.basepath
+            if model.basePath /= "" then
+                baseHref model.basePath
 
             else
                 href
@@ -159,7 +177,7 @@ view model =
 ---- PROGRAM ----
 
 
-main : Program String Model Msg
+main : Program (List String) Model Msg
 main =
     Browser.application
         { view = view

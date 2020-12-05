@@ -17,6 +17,11 @@ div.row {
   text-align: left;
 }
 
+.markdown-page {
+  text-align: left;
+  margin-top: 2em;
+}
+
 .config-button {
   margin: 10px;
 }
