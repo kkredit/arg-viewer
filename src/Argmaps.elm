@@ -105,7 +105,6 @@ view model toMsg =
                     ]
                 )
             , makeRowCol Col.sm6 <| renderMapSpecials model.argmap model.alertVisibility toMsg
-            , makeRowCol Col.sm12 [ div [ id "map" ] [] ]
             ]
         ]
 

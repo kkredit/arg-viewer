@@ -6,7 +6,7 @@ import Bootstrap.Navbar as Navbar
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (Attribute, div, text)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (class, hidden, href, id)
 import Url
 import Url.Parser as UrlParser exposing ((</>), Parser, fragment, map, oneOf, s)
 
@@ -112,25 +112,25 @@ baseHref basepath path =
 view : Model -> Browser.Document Msg
 view model =
     let
-        ( title, content ) =
+        ( title, content, isOnMap ) =
             case model.route of
                 Nothing ->
-                    ( "Invalid path", text "Invalid path." )
+                    ( "Invalid path", text "Invalid path.", False )
 
                 Just route ->
                     case route of
                         Base maybeHash ->
                             case maybeHash of
                                 Nothing ->
-                                    ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg )
+                                    ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg, True )
 
                                 Just hash ->
                                     case hash of
                                         "about" ->
-                                            ( "About", About.view )
+                                            ( "About", About.view, False )
 
                                         _ ->
-                                            ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg )
+                                            ( "Argmaps", Argmaps.view model.argmapsState ArgmapsMsg, True )
 
         bHref =
             if model.basepath /= "" then
@@ -147,7 +147,10 @@ view model =
             |> Navbar.items
                 [ Navbar.itemLink [ bHref "/#about" ] [ text "About" ] ]
             |> Navbar.view model.navbarState
-        , div [ class "container" ] [ content ]
+        , div [ class "container" ]
+            [ content
+            , div [ id "map", hidden (not isOnMap) ] []
+            ]
         ]
     }
 
