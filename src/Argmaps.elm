@@ -91,7 +91,7 @@ subscriptions toMsg _ =
 view : Model -> (Msg -> msg) -> Html msg
 view model toMsg =
     div []
-        [ h1 [ class "page-header" ] [ text "Argument Map Viewer" ]
+        [ h1 [ class "page-header" ] [ text "Mapping the Encryption Policy Debate" ]
         , Grid.container []
             [ makeRowCol Col.sm10
                 (List.map (makeButton model.config.name toMsg)

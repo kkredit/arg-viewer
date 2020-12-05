@@ -165,7 +165,7 @@ view model =
             |> Navbar.items
                 [ Navbar.itemLink [ bHref "/#about" ] [ text "About" ] ]
             |> Navbar.view model.navbarState
-        , div [ class "container" ]
+        , div [ class "container page-content" ]
             [ content
             , div [ id "map", hidden (not isOnMap) ] []
             ]
