@@ -5,7 +5,8 @@
 
 import autoBind from 'auto-bind';
 import * as Argdown from '@argdown/core';
-import { SyncDotToSvgExportPlugin } from './SyncDotToSvgExportPlugin';
+// import { SyncDotToSvgExportPlugin } from './SyncDotToSvgExportPlugin';
+import { SyncDotToSvgExportPlugin } from '@argdown/core/dist/plugins/SyncDotToSvgExportPlugin';
 
 const fail = (message) => JSON.stringify({ success: false, error: message });
 const success = () => JSON.stringify({ success: true, error: '' });
@@ -55,7 +56,7 @@ export default class ArgdownManager {
     this.argdown = createArgdownApp();
     this.overrideWebComponentPlugin();
 
-    this.logLevel = process.env.NODE_ENV === 'production' ? 'error' : 'warning';
+    this.logLevel = process.env.NODE_ENV === 'production' ? 'verbose' : 'warning';
   }
 
   applySettings(settings) {
@@ -96,7 +97,7 @@ export default class ArgdownManager {
 
   async loadArgument() {
     if (!this.argument) {
-      const response = await fetch('./assets/argument.ad');
+      const response = await fetch('./assets/sample.ad');
       this.argument = await response.text();
     }
   }
@@ -117,6 +118,7 @@ export default class ArgdownManager {
       logLevel: this.logLevel
     });
 
+    console.log(result);
     if (result.lexerErrors?.length > 0) return fail(this.lexerErrors.map((e) => `${e.message}\n`));
     if (!result.webComponent) return fail('Argdown WebComponent creation failed.');
 

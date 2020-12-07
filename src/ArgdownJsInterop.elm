@@ -125,8 +125,7 @@ configSerialize : MapConfig -> String
 configSerialize c =
     Encode.encode 1 <|
         Encode.object
-            [ ( "webComponent", Encode.object [ ( "figureCaption", Encode.string <| captionPrefex ++ c.label ) ] )
-            , ( "group", Encode.object [ ( "groupDepth", justOrNull Encode.int c.groupDepth ) ] )
+            [ ( "group", Encode.object [] )
             , ( "selection"
               , Encode.object
                     [ ( "selectedSections", justOrNull (Encode.list Encode.string) c.selectedSections )
