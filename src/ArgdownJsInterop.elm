@@ -109,7 +109,7 @@ presetConfigs =
 
 defaultConfig : MapConfig
 defaultConfig =
-    presetConfigs.contrib
+    presetConfigs.whole
 
 
 

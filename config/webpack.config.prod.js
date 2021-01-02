@@ -4,7 +4,7 @@ const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
@@ -56,76 +56,76 @@ module.exports = {
       path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
   },
   optimization: {
-    minimizer: [
-      // new UglifyJsPlugin({
-      //   uglifyOptions: {
-      //     // ES5 is required in the minified code if you want compatibility with IE11,
-      //     // otherwise you can bump it up to ES8
-      //     ecma: 5,
-      //     // Compression settings mostly based on <https://guide.elm-lang.org/optimization/asset_size.html>
-      //     compress: {
-      //       passes: 2,
-      //       warnings: false,
-      //       // Disabled because of an issue with Uglify breaking seemingly valid code:
-      //       // https://github.com/facebook/create-react-app/issues/2376
-      //       // Pending further investigation:
-      //       // https://github.com/mishoo/UglifyJS2/issues/2011
-      //       comparisons: false,
-      //       pure_getters: true,
-      //       keep_fargs: false,
-      //       unsafe_comps: true,
-      //       unsafe: true,
-      //       pure_funcs: [
-      //         'A2',
-      //         'A3',
-      //         'A4',
-      //         'A5',
-      //         'A6',
-      //         'A7',
-      //         'A8',
-      //         'A9',
-      //         'F2',
-      //         'F3',
-      //         'F4',
-      //         'F5',
-      //         'F6',
-      //         'F7',
-      //         'F8',
-      //         'F9',
-      //       ],
-      //     },
-      //     mangle: {
-      //       safari10: true,
-      //     },
-      //     output: {
-      //       comments: false,
-      //       // Turned on because emoji and regex is not minified properly using default
-      //       // https://github.com/facebook/create-react-app/issues/2488
-      //       ascii_only: true,
-      //     },
-      //   },
-      //   // Use multi-process parallel running to improve the build speed
-      //   // Default number of concurrent runs: os.cpus().length - 1
-      //   parallel: true,
-      //   // Enable file caching
-      //   cache: true,
-      //   sourceMap: shouldUseSourceMap,
-      // }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessorOptions: {
-          parser: safePostCssParser,
-          map: shouldUseSourceMap
-            ? {
-                // This forces the sourcemap to be output into a separate file
-                inline: false,
-                // This appends the sourceMappingURL to the end of the css file,
-                // helping the browser find the sourcemap
-                annotation: true
-              }
-            : false
-        }
-      })
-    ],
+    // minimizer: [
+    // new UglifyJsPlugin({
+    //   uglifyOptions: {
+    //     // ES5 is required in the minified code if you want compatibility with IE11,
+    //     // otherwise you can bump it up to ES8
+    //     ecma: 5,
+    //     // Compression settings mostly based on <https://guide.elm-lang.org/optimization/asset_size.html>
+    //     compress: {
+    //       passes: 2,
+    //       warnings: false,
+    //       // Disabled because of an issue with Uglify breaking seemingly valid code:
+    //       // https://github.com/facebook/create-react-app/issues/2376
+    //       // Pending further investigation:
+    //       // https://github.com/mishoo/UglifyJS2/issues/2011
+    //       comparisons: false,
+    //       pure_getters: true,
+    //       keep_fargs: false,
+    //       unsafe_comps: true,
+    //       unsafe: true,
+    //       pure_funcs: [
+    //         'A2',
+    //         'A3',
+    //         'A4',
+    //         'A5',
+    //         'A6',
+    //         'A7',
+    //         'A8',
+    //         'A9',
+    //         'F2',
+    //         'F3',
+    //         'F4',
+    //         'F5',
+    //         'F6',
+    //         'F7',
+    //         'F8',
+    //         'F9',
+    //       ],
+    //     },
+    //     mangle: {
+    //       safari10: true,
+    //     },
+    //     output: {
+    //       comments: false,
+    //       // Turned on because emoji and regex is not minified properly using default
+    //       // https://github.com/facebook/create-react-app/issues/2488
+    //       ascii_only: true,
+    //     },
+    //   },
+    //   // Use multi-process parallel running to improve the build speed
+    //   // Default number of concurrent runs: os.cpus().length - 1
+    //   parallel: true,
+    //   // Enable file caching
+    //   cache: true,
+    //   sourceMap: shouldUseSourceMap,
+    // }),
+    // new OptimizeCSSAssetsPlugin({
+    //   cssProcessorOptions: {
+    //     parser: safePostCssParser,
+    //     map: shouldUseSourceMap
+    //       ? {
+    //           // This forces the sourcemap to be output into a separate file
+    //           inline: false,
+    //           // This appends the sourceMappingURL to the end of the css file,
+    //           // helping the browser find the sourcemap
+    //           annotation: true
+    //         }
+    //       : false
+    //   }
+    // })
+    // ],
     // Automatically split vendor and commons
     // https://twitter.com/wSokra/status/969633336732905474
     splitChunks: {
@@ -304,19 +304,19 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true
-      }
+      template: paths.appHtml
+      // minify: {
+      // removeComments: true,
+      // collapseWhitespace: true,
+      // removeRedundantAttributes: true,
+      // useShortDoctype: true,
+      // removeEmptyAttributes: true,
+      // removeStyleLinkTypeAttributes: true,
+      // keepClosingSlash: true,
+      // minifyJS: true,
+      // minifyCSS: true,
+      // minifyURLs: true
+      // }
     }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
@@ -330,12 +330,12 @@ module.exports = {
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: 'static/css/[name].[contenthash:8].css',
-      chunkFilename: 'static/css/[name].[contenthash:8].chunk.css'
-    }),
+    // new MiniCssExtractPlugin({
+    //   // Options similar to the same options in webpackOptions.output
+    //   // both options are optional
+    //   filename: 'static/css/[name].[contenthash:8].css',
+    //   chunkFilename: 'static/css/[name].[contenthash:8].chunk.css'
+    // }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
