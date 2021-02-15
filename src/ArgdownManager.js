@@ -56,7 +56,7 @@ export default class ArgdownManager {
     this.argdown = createArgdownApp();
     this.overrideWebComponentPlugin();
 
-    this.logLevel = process.env.NODE_ENV === 'production' ? 'error' : 'warning';
+    this.logLevel = process.env.NODE_ENV === 'production' ? 'debug' : 'warning';
   }
 
   applySettings(settings) {
@@ -119,6 +119,7 @@ export default class ArgdownManager {
     });
 
     if (result.lexerErrors?.length > 0) return fail(this.lexerErrors.map((e) => `${e.message}\n`));
+    console.log(result);
     if (!result.webComponent) return fail('Argdown WebComponent creation failed.');
 
     this.webComponent = result.webComponent;
