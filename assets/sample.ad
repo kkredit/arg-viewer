@@ -1,0 +1,18 @@
+
+# Group
+
+[Statement 1]: Statement.
+
+[Statement 2]: Contradictory statement.
+  >< [Statement 1]
+
+# Arguments {isGroup: false}
+
+[Statement 1]
+  - <Argument 1>: Attacking statement 1.
+    <_ [Statement 3]: Undercut argument 1.
+    + [Statement 4]: Supporting argument 1.
+
+[Statement 2]
+  + <Argument 2>: Supporting statement 2.
+    <_ [Statement 5]: Undercut argument 2.

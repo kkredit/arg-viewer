@@ -12,7 +12,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/arg-viewer/assets/favicon.ico"
   },
   {
-    "revision": "2a3a147d534d3dc348a7d362fc7147ee",
+    "revision": "f220a71fdad20ddc6d22d44a87ad0c6f",
+    "url": "/arg-viewer/assets/sample.ad"
+  },
+  {
+    "revision": "4719e756ea53f8afe5a724c5343e4e60",
     "url": "/arg-viewer/index.html"
   },
   {
@@ -20,19 +24,19 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/arg-viewer/manifest.json"
   },
   {
-    "revision": "e3592a9f5e317c916d0b",
+    "revision": "2f19198509e148093fb2",
     "url": "/arg-viewer/static/css/main.e39d95e2.chunk.css"
   },
   {
-    "revision": "e3592a9f5e317c916d0b",
-    "url": "/arg-viewer/static/js/main.e3592a9f.chunk.js"
+    "revision": "2f19198509e148093fb2",
+    "url": "/arg-viewer/static/js/main.2f191985.chunk.js"
   },
   {
     "revision": "4da4f8a028c91ad46056",
     "url": "/arg-viewer/static/js/runtime~main.4da4f8a0.js"
   },
   {
-    "revision": "37558d42c7d97c766e77",
-    "url": "/arg-viewer/static/js/vendors~main.37558d42.chunk.js"
+    "revision": "c79d81090bf3c708f8ad",
+    "url": "/arg-viewer/static/js/vendors~main.c79d8109.chunk.js"
   }
 ]);
