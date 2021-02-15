@@ -1,0 +1,13 @@
+{
+  "main.css": "/arg-viewer/static/css/main.e39d95e2.chunk.css",
+  "main.js": "/arg-viewer/static/js/main.e3592a9f.chunk.js",
+  "runtime~main.js": "/arg-viewer/static/js/runtime~main.4da4f8a0.js",
+  "vendors~main.js": "/arg-viewer/static/js/vendors~main.37558d42.chunk.js",
+  "./service-worker.js": "/arg-viewer/./service-worker.js",
+  "assets/ArgVuSansMono-Regular-8.2.otf": "/arg-viewer/assets/ArgVuSansMono-Regular-8.2.otf",
+  "assets/argument.ad": "/arg-viewer/assets/argument.ad",
+  "assets/favicon.ico": "/arg-viewer/assets/favicon.ico",
+  "index.html": "/arg-viewer/index.html",
+  "manifest.json": "/arg-viewer/manifest.json",
+  "precache-manifest.4f143be525a62a8314f8e8acaafc9de7.js": "/arg-viewer/precache-manifest.4f143be525a62a8314f8e8acaafc9de7.js"
+}
